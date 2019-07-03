@@ -1,0 +1,70 @@
+<div class="container">
+  <h1 class="text-center text-primary">
+    Template Driven Form
+  </h1>
+  <!-- ngForm -->
+  <!-- ngModel -->
+  <form #pForm=ngForm>
+
+    {{ pForm.value | json }}
+
+    <div class="form-group">
+      <label>Name</label>
+      <input class="form-control"
+             name="pName"
+             type="text"
+             #name=ngModel
+             [(ngModel)]="person.name"
+             [class.is-invalid]="name.invalid && name.touched" required>
+      <small class="text-danger"
+             [class.d-none]="name.valid || name.untouched">Name is required</small>
+    </div>
+
+    <div class="form-group">
+      <label>Age</label>
+      <input class="form-control"
+             name="pAge"
+             type="number"
+             #age=ngModel
+             [(ngModel)]="person.age"
+             [class.is-invalid]="age.invalid && age.touched" required>
+      <small class="text-danger"
+             [class.d-none]="age.valid || age.untouched">Age is required</small>
+    </div>
+
+    <div class="form-group">
+      <label>Email</label>
+      <input class="form-control"
+             name="pEmail"
+             type="text"
+             pattern="^[A-for 9.!# $ %& '*+/=?^_ '{|}~ -] +@ [A-for 9 -] +(?: \.[ A-for 9 -] +)*$"
+             #email=ngModel
+             [(ngModel)]="person.email"
+             [class.is-invalid]="email.invalid && email.touched" required>
+      <div *ngIf="email.errors && (email.invalid && email.touched)">
+        <small class="text-danger" *ngIf="email.errors.required">Email is required</small>
+        <small class="text-danger" *ngIf="email.errors.pattern">Invalid email</small>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <select class="form-control"
+              name="pTopic"
+              (blur)="validateData(topic.value)"
+              (change)="validateData(topic.value)"
+              #topic=ngModel
+              [(ngModel)]="person.topic"
+              [class.is-invalid]="topicError && topic.touched">
+        <option value="default">I am interested in</option>
+        <option *ngFor="let topic of topics">{{ topic }}</option>
+      </select>
+      <!-- <small class="text-danger"
+             [class.d-none]="!topicError || topic.untouched">Please select one</small> -->
+      <small class="text-danger" *ngIf="topicError && topic.touched">Please select one</small>
+    </div>
+
+    <button type="submit" class="btn btn-primary" (click)="onSubmit()">Submit</button>
+  </form>
+</div>
+
+<router-outlet></router-outlet>
